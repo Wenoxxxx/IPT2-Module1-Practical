@@ -2,6 +2,10 @@ function isReadableText(value) {
 	return /[A-Za-z]/.test(value);
 }
 
+function isValidSubjectCode(value) {
+	return /[A-Za-z]/.test(value) && /[0-9]/.test(value);
+}
+
 const subjectForm = document.getElementById('subjectForm');
 
 if (subjectForm) {
@@ -34,8 +38,8 @@ if (subjectForm) {
 		const validationErrors = [];
 		if (!subjectCode) {
 			validationErrors.push([subjectCodeInput, errors[0], 'Subject code is required.']);
-		} else if (!isReadableText(subjectCode)) {
-			validationErrors.push([subjectCodeInput, errors[0], 'Subject code must contain letters and cannot be numbers only.']);
+		} else if (!isValidSubjectCode(subjectCode)) {
+			validationErrors.push([subjectCodeInput, errors[0], 'Subject code must contain both letters and numbers.']);
 		}
 		if (!subjectName) {
 			validationErrors.push([subjectNameInput, errors[1], 'Subject name is required.']);
