@@ -75,51 +75,40 @@
                 
                 <!-- Begin Page Content -->
                 <div class="container-fluid mt-3">
-                    <form class="g-3" id="subjectForm"></form>
+                    <form class="g-3" id="subjectForm" novalidate>
                         <div class="row">
                             <div class="col-4">
                                 <label for="subjectCode" class="form-label">Subject Code</label>
-                                <input type="text" class="form-control" id="subjectCode">
+                                <input type="text" class="form-control" id="subjectCode" required>
                             </div>
                             <div class="col-4">
                                 <label for="subjectName" class="form-label">Subject Name</label>
-                                <input type="text" class="form-control" id="subjectName">
+                                <input type="text" class="form-control" id="subjectName" required>
                             </div>
                             <div class="col-4">
                                 <label for="units" class="form-label">Units</label>
-                                <input type="number" class="form-control" id="units">
+                                <input type="number" class="form-control" id="units" min="1" max="5" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 d-flex justify-content-end mt-2">
-                                <button type="button" class="btn btn-primary" id="addSubject">Add Subject</button>
+                                <button type="submit" class="btn btn-primary" id="addSubject">Add Subject</button>
                             </div>
                         </div>
+                        <div id="subjectError" class="text-danger mt-2" role="alert"></div>
                     </form>
                     <br>
                     <br>
                     <div class="row">
-                        <table class="table table-striped" id="">
-                            <tbody>
-                                <thead>
-                                    <tr>
-                                        <th>Subject Code</th>
-                                        <th>Subject Name</th>
-                                        <th>Units</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table-content">
-                                    <!-- <tr>
-                                        <td>1001</td>
-                                        <td>CASERES, KLEVIE JUN ROFLO</td>
-                                        <td>kleviecaseres@buksu.edu.ph</td>
-                                        <td>Apo Macote, Malaybalay City</td>
-                                        <td>
-                                            <input class="btn btn-warning" type="button" value="Edit">
-                                            <input class="btn btn-danger" type="button" value="Delete">
-                                        </td>
-                                    </tr> -->
-                                </tbody>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Subject Code</th>
+                                    <th>Subject Name</th>
+                                    <th>Units</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-content">
                             </tbody>
                         </table>
                     </div>
