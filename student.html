@@ -76,30 +76,35 @@
                 
                 <!-- Begin Page Content -->
                 <div class="container-fluid  mt-3">
-                    <form class="g-3" id="studentForm">
+                    <form class="g-3" id="studentForm" novalidate>
                         <div class="row">
                             <div class="col-md-3">
                                 <label for="idNumber" class="form-label">ID Number</label>
-                                <input type="text" class="form-control" id="idNumber">
+                                <input type="text" class="form-control" id="idNumber" required>
+                                <div class="invalid-feedback" id="idNumberError"></div>
                             </div>
                             <div class="col-md-3">
                                 <label for="firstName" class="form-label">Firstname</label>
-                                <input type="text" class="form-control" id="firstName">
+                                <input type="text" class="form-control" id="firstName" required>
+                                <div class="invalid-feedback" id="firstNameError"></div>
                             </div>
                             <div class="col-md-3">
                                 <label for="middleName" class="form-label">Middle Name</label>
                                 <input type="text" class="form-control" id="middleName">
+                                <div class="invalid-feedback" id="middleNameError"></div>
                             </div>
                             <div class="col-md-3">
                                 <label for="lastName" class="form-label">Lastname</label>
-                                <input type="text" class="form-control" id="lastName">
+                                <input type="text" class="form-control" id="lastName" required>
+                                <div class="invalid-feedback" id="lastNameError"></div>
                             </div>
                         </div>
                     <div class="row">
                         <div class="col-md-12 d-flex justify-content-end mt-2">
-                            <button type="button" class="btn btn-primary" id="addStudentButton">Add Student</button>
+                            <button type="submit" class="btn btn-primary" id="addStudentButton">Add Student</button>
                         </div>
                     </div>
+                    <div id="studentError" class="text-danger mt-2" role="alert"></div>
                     </form>
                     <br>
                     <br>

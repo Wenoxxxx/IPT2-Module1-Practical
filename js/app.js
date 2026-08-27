@@ -76,13 +76,14 @@ if (studentForm && addStudentButton) {
 	const firstNameInput = document.getElementById('firstName');
 	const middleNameInput = document.getElementById('middleName');
 	const lastNameInput = document.getElementById('lastName');
-	const studentError = document.createElement('div');
-	const verifyLetters = /^[A-Za-z ]+$/;
-
-	studentError.id = 'studentError';
-	studentError.className = 'text-danger mt-2';
-	studentError.setAttribute('role', 'alert');
-	studentForm.appendChild(studentError);
+	const studentError = document.getElementById('studentError');
+	const inputs = [idNumberInput, firstNameInput, middleNameInput, lastNameInput];
+	const errors = [
+		document.getElementById('idNumberError'),
+		document.getElementById('firstNameError'),
+		document.getElementById('middleNameError'),
+		document.getElementById('lastNameError')
+	];
 
 	idNumberInput.addEventListener('input', function () {
 		idNumberInput.value = idNumberInput.value.replace(/[^0-9]/g, '');
@@ -94,20 +95,49 @@ if (studentForm && addStudentButton) {
 		});
 	});
 
-	addStudentButton.addEventListener('click', function () {
+	studentForm.addEventListener('submit', function (event) {
+		event.preventDefault();
+
 		const idNumber = idNumberInput.value.trim();
 		const firstName = firstNameInput.value.trim();
 		const middleName = middleNameInput.value.trim();
 		const lastName = lastNameInput.value.trim();
 
-		if (!idNumber || !firstName || !lastName) {
-			studentError.textContent = 'ID number, first name, and last name are required.';
-			return;
+		inputs.forEach(function (input) {
+			input.classList.remove('is-invalid');
+		});
+		errors.forEach(function (error) {
+			error.textContent = '';
+		});
+		studentError.textContent = '';
+
+		const validationErrors = [];
+		if (!idNumber) {
+			validationErrors.push([idNumberInput, errors[0], 'ID number is required.']);
+		} else if (!/^\d+$/.test(idNumber)) {
+			validationErrors.push([idNumberInput, errors[0], 'ID number must contain numbers only.']);
+		}
+		if (!firstName) {
+			validationErrors.push([firstNameInput, errors[1], 'First name is required.']);
+		} else if (!isReadableText(firstName)) {
+			validationErrors.push([firstNameInput, errors[1], 'First name must contain letters and cannot be numbers only.']);
+		}
+		if (middleName && !isReadableText(middleName)) {
+			validationErrors.push([middleNameInput, errors[2], 'Middle name must contain letters and cannot be numbers only.']);
+		}
+		if (!lastName) {
+			validationErrors.push([lastNameInput, errors[3], 'Last name is required.']);
+		} else if (!isReadableText(lastName)) {
+			validationErrors.push([lastNameInput, errors[3], 'Last name must contain letters and cannot be numbers only.']);
 		}
 
-		if (!/^\d+$/.test(idNumber) || !verifyLetters.test(firstName) ||
-			(middleName && !verifyLetters.test(middleName)) || !verifyLetters.test(lastName)) {
-			studentError.textContent = 'Enter a numeric ID number and names containing letters and spaces only.';
+		if (validationErrors.length > 0) {
+			validationErrors.forEach(function (validationError) {
+				validationError[0].classList.add('is-invalid');
+				validationError[1].textContent = validationError[2];
+			});
+			studentError.textContent = 'Please correct the highlighted fields.';
+			validationErrors[0][0].focus();
 			return;
 		}
 
