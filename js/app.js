@@ -26,3 +26,56 @@ if (subjectForm) {
 		subjectForm.reset();
 	});
 }
+
+const studentForm = document.getElementById('studentForm');
+const addStudentButton = document.getElementById('addStudentButton');
+
+if (studentForm && addStudentButton) {
+	const idNumberInput = document.getElementById('idNumber');
+	const firstNameInput = document.getElementById('firstName');
+	const middleNameInput = document.getElementById('middleName');
+	const lastNameInput = document.getElementById('lastName');
+	const studentError = document.createElement('div');
+	const verifyLetters = /^[A-Za-z ]+$/;
+
+	studentError.id = 'studentError';
+	studentError.className = 'text-danger mt-2';
+	studentError.setAttribute('role', 'alert');
+	studentForm.appendChild(studentError);
+
+	idNumberInput.addEventListener('input', function () {
+		idNumberInput.value = idNumberInput.value.replace(/[^0-9]/g, '');
+	});
+
+	[firstNameInput, middleNameInput, lastNameInput].forEach(function (input) {
+		input.addEventListener('input', function () {
+			input.value = input.value.replace(/[^A-Za-z ]/g, '');
+		});
+	});
+
+	addStudentButton.addEventListener('click', function () {
+		const idNumber = idNumberInput.value.trim();
+		const firstName = firstNameInput.value.trim();
+		const middleName = middleNameInput.value.trim();
+		const lastName = lastNameInput.value.trim();
+
+		if (!idNumber || !firstName || !lastName) {
+			studentError.textContent = 'ID number, first name, and last name are required.';
+			return;
+		}
+
+		if (!/^\d+$/.test(idNumber) || !verifyLetters.test(firstName) ||
+			(middleName && !verifyLetters.test(middleName)) || !verifyLetters.test(lastName)) {
+			studentError.textContent = 'Enter a numeric ID number and names containing letters and spaces only.';
+			return;
+		}
+
+		studentError.textContent = '';
+		const row = document.getElementById('table-content').insertRow();
+		row.insertCell().textContent = idNumber;
+		row.insertCell().textContent = firstName;
+		row.insertCell().textContent = middleName;
+		row.insertCell().textContent = lastName;
+		studentForm.reset();
+	});
+}
