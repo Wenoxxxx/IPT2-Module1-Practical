@@ -8,17 +8,58 @@ if (subjectForm) {
 	subjectForm.addEventListener('submit', function (event) {
 		event.preventDefault();
 
-		const subjectCode = document.getElementById('subjectCode').value.trim();
-		const subjectName = document.getElementById('subjectName').value.trim();
-		const units = Number(document.getElementById('units').value);
+		const subjectCodeInput = document.getElementById('subjectCode');
+		const subjectNameInput = document.getElementById('subjectName');
+		const unitsInput = document.getElementById('units');
+		const subjectCode = subjectCodeInput.value.trim();
+		const subjectName = subjectNameInput.value.trim();
+		const unitsValue = unitsInput.value.trim();
+		const units = Number(unitsValue);
 		const subjectError = document.getElementById('subjectError');
+		const inputs = [subjectCodeInput, subjectNameInput, unitsInput];
+		const errors = [
+			document.getElementById('subjectCodeError'),
+			document.getElementById('subjectNameError'),
+			document.getElementById('unitsError')
+		];
 
-		if (!isReadableText(subjectCode) || !isReadableText(subjectName) || !Number.isInteger(units) || units < 1 || units > 5) {
-			subjectError.textContent = 'Enter readable subject code and name values, and the maximum number of units is 5.';
+		inputs.forEach(function (input) {
+			input.classList.remove('is-invalid');
+		});
+		errors.forEach(function (error) {
+			error.textContent = '';
+		});
+		subjectError.textContent = '';
+
+		const validationErrors = [];
+		if (!subjectCode) {
+			validationErrors.push([subjectCodeInput, errors[0], 'Subject code is required.']);
+		} else if (!isReadableText(subjectCode)) {
+			validationErrors.push([subjectCodeInput, errors[0], 'Subject code must contain letters and cannot be numbers only.']);
+		}
+		if (!subjectName) {
+			validationErrors.push([subjectNameInput, errors[1], 'Subject name is required.']);
+		} else if (!isReadableText(subjectName)) {
+			validationErrors.push([subjectNameInput, errors[1], 'Subject name must contain letters and cannot be numbers only.']);
+		}
+		if (!unitsValue) {
+			validationErrors.push([unitsInput, errors[2], 'Units are required.']);
+		} else if (!Number.isInteger(units)) {
+			validationErrors.push([unitsInput, errors[2], 'Units must be a whole number.']);
+		} else if (units < 1 || units > 5) {
+			validationErrors.push([unitsInput, errors[2], 'Units must be from 1 to 5.']);
+		}
+
+		if (validationErrors.length > 0) {
+			validationErrors.forEach(function (validationError) {
+				validationError[0].classList.add('is-invalid');
+				validationError[1].textContent = validationError[2];
+			});
+			subjectError.textContent = 'Please correct the highlighted fields.';
+			validationErrors[0][0].focus();
 			return;
 		}
 
-		subjectError.textContent = '';
 		const row = document.getElementById('table-content').insertRow();
 		row.insertCell().textContent = subjectCode;
 		row.insertCell().textContent = subjectName;
